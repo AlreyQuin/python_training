@@ -43,7 +43,7 @@ class GroupHelper:
         wd.find_element_by_name("edit").click()
         self.app.change_field_value("group_name", group.name)
         self.app.change_field_value("group_header", group.header)
-        self.app.change_field_value("group_header", group.footer)
+        self.app.change_field_value("group_footer", group.footer)
         wd.find_element_by_name("update").click()
         self.return_to_group_form()
 
