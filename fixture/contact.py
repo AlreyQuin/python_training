@@ -72,6 +72,7 @@ class ContactHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         self.submit_create_contact()
         self.open_home_page()
+        self.contact_cache = None
 
     def submit_create_contact(self):
         wd = self.app.wd
@@ -88,6 +89,7 @@ class ContactHelper:
         self.select_first_contact()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+        self.contact_cache = None
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
@@ -117,6 +119,7 @@ class ContactHelper:
         self.app.change_field_value("notes", contact.notes)
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         self.open_home_page()
+        self.contact_cache = None
 
     def select_first_contact(self):
         wd = self.app.wd
@@ -127,15 +130,18 @@ class ContactHelper:
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_home_page()
-        contacts = []
-        for element in wd.find_elements_by_name("entry"):
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            fr = element.find_element_by_css_selector("#maintable td:nth-child(3)")
-            first = fr.text
-            ls = element.find_element_by_css_selector("#maintable td:nth-child(2)")
-            last = ls.text
-            contacts.append(Contact(id=id, firstname=first, lastname=last))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.contact_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                fr = element.find_element_by_css_selector("#maintable td:nth-child(3)")
+                first = fr.text
+                ls = element.find_element_by_css_selector("#maintable td:nth-child(2)")
+                last = ls.text
+                self.contact_cache.append(Contact(id=id, firstname=first, lastname=last))
+        return list(self.contact_cache)

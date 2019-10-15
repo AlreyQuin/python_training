@@ -29,7 +29,7 @@ def test_delete_contact(app):
     old_contact = app.contact.get_contact_list()
     app.contact.delete_first_contact()
     time.sleep(2)
+    assert len(old_contact) - 1 == app.contact.count()
     new_contact = app.contact.get_contact_list()
-    assert len(old_contact) - 1 == len(new_contact)
     old_contact[0:1] = []
     assert old_contact == new_contact
