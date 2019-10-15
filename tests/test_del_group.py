@@ -3,7 +3,7 @@ from model.group import Group
 
 def test_delete_group(app):
     if app.group.count() == 0:
-        app.group.create(Group(name="test"))
+        app.group.create(Group(name="test", header="test_header", footer="test_footer"))
     old_groups = app.group.get_group_list()
     app.group.delete_first_group()
     new_groups = app.group.get_group_list()

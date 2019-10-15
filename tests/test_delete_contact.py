@@ -1,12 +1,34 @@
 # -*- coding: utf-8 -*-
 from model.contact import Contact
+import time
 
 
 def test_delete_contact(app):
     if app.contact.count() == 0:
-        app.contact.create(Contact(firstname="test", middlename="test", lastname="test"))
+        app.contact.create(Contact(firstname="First name",
+                                    middlename="Middle name",
+                                    lastname="Last name",
+                                    nickname="Nickname",
+                                    title="Title",
+                                    company="Company",
+                                    address="Company Address",
+                                    home="Home phone",
+                                    mobile="Mobile phone",
+                                    work="Work phone",
+                                    fax="Fax",
+                                    email="E-mail",
+                                    email2="E-mail-2",
+                                    email3="E-mail-3",
+                                    homepage="Homepage",
+                                    bday="17",
+                                    bmonth="September",
+                                    byear="2000",
+                                    address2="Address",
+                                    phone2="Home",
+                                    notes="Notes"))
     old_contact = app.contact.get_contact_list()
     app.contact.delete_first_contact()
+    time.sleep(2)
     new_contact = app.contact.get_contact_list()
     assert len(old_contact) - 1 == len(new_contact)
     old_contact[0:1] = []
