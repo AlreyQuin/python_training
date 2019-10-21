@@ -15,6 +15,13 @@ def random_number(maxlen):
     return "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
+def random_day():
+    days = []
+    for i in range(1, 32):
+        days.append(i)
+    return str(random.choice(days))
+
+
 def random_month():
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     return random.choice(months)
@@ -46,7 +53,7 @@ testdata = [Contact(firstname=random_string(6),
                     email2=random_email(5),
                     email3=random_email(4),
                     homepage=random_site(10),
-                    bday=random_number(2),
+                    bday=random_day(),
                     bmonth=random_month(),
                     byear=random_number(4),
                     address2=random_string(35),
