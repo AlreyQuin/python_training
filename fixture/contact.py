@@ -143,6 +143,32 @@ class ContactHelper:
         phone2 = re.search("P: (.*)", text).group(1)
         return Contact(fullname=fullname, address=address, email=email, email2=email2, email3=email3, home=home, mobile=mobile, work=work, phone2=phone2)
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_contact_by_id(id)
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+        self.contact_cache = None
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
+    def edit_contact_by_id(self, contact, id):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_id(id)
+        self.field_form_contact(contact)
+        wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
+        self.open_home_page()
+        self.contact_cache = None
+
+    def open_contact_to_edit_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        el = wd.find_element_by_xpath("//a[@href='edit.php?id=" + id + "']")
+        el.click()
+
 
 
 

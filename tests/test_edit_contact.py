@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 from model.contact import Contact
-from random import randrange
+import random
 
 
-def test_edit_name(app, json_contacts):
+def test_edit_name(app, db, json_contacts, check_ui):
     contact = json_contacts
-    if app.contact.count() == 0:
+    if len(db.get_contact_list()) == 0:
         app.contact.create(contact)
-    old_contact = app.contact.get_contact_list()
-    index = randrange(len(old_contact))
-    contact.id = old_contact[index].id
-    app.contact.edit_contact_by_index(contact, index)
-    assert len(old_contact) == app.contact.count()
-    new_contact = app.contact.get_contact_list()
-    old_contact[index] = contact
+    old_contact = db.get_contact_list()
+    c = random.choice(old_contact)
+    app.contact.edit_contact_by_id(contact, c.id)
+    new_contact = db.get_contact_list()
+    assert len(old_contact) == len(new_contact)
+    contact.id = c.id
+    old_contact.remove(c)
+    old_contact.append(contact)
     assert sorted(old_contact, key=Contact.id_or_max) == sorted(new_contact, key=Contact.id_or_max)
+    if check_ui:
+        assert sorted(new_contact, key=Contact.id_or_max) == sorted(app.contact.get_group_list(), key=Contact.id_or_max)
